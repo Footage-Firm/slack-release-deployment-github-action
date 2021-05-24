@@ -2,6 +2,10 @@ name: 'Slack Release Deployment'
 description: 'An opinionated Github action that updates an existing deployment Slack message with new information and buttons that inform relevant parties about the state of the release.'
 author: 'Tochukwu Victor'
 inputs:
+  slack_api_method:
+    description: 'Slack api method used in the action.'
+    default: "chat.update"
+    required: false
   slack_bot_token:
     description: 'Slack bot token used to make the chat.postMessage API call. Token should be prefixed by xoxb-'
     required: true
@@ -39,6 +43,7 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
+    - ${{ inputs.slack_api_method }}
     - ${{ inputs.slack_bot_token }}
     - ${{ inputs.slack_channel_id }}
     - ${{ inputs.slack_message_ts }}

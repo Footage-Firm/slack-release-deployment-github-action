@@ -2,22 +2,23 @@
 
 set -eu
 
-SLACK_BOT_TOKEN="${1?Must provide slack bot token}"
-SLACK_CHANNEL_ID="${2?Must provide slack channel ID}"
-SLACK_MESSAGE_TS="${3?Must provide slack message timestamp}"
-SLACK_PROMPT="${4?Must provide slack prompt}"
+SLACK_API_METHOD="${1?Must provide slack api method}"
+SLACK_BOT_TOKEN="${2?Must provide slack bot token}"
+SLACK_CHANNEL_ID="${3?Must provide slack channel ID}"
+SLACK_MESSAGE_TS="${4?Must provide slack message timestamp}"
+SLACK_PROMPT="${5?Must provide slack prompt}"
 
-APP_ENDPOINT="${5?Must provide app endpoint}"
-APP_ENVIRONMENT="${6?Must provide app environment}"
-APP_NAME="${7?Must provide app name}"
+APP_ENDPOINT="${6?Must provide app endpoint}"
+APP_ENVIRONMENT="${7?Must provide app environment}"
+APP_NAME="${8?Must provide app name}"
 
-COMMIT_MESSAGE_SUBJECT="${8?Must provide commit message subject}"
-COMMITTER_NAME="${9?Must provide committer name}"
-COMMIT_SHA="${10?Must provide commit sha}"
+COMMIT_MESSAGE_SUBJECT="${9?Must provide commit message subject}"
+COMMITTER_NAME="${10?Must provide committer name}"
+COMMIT_SHA="${11?Must provide commit sha}"
 COMMIT_SHA_SHORT="$(echo "$COMMIT_SHA" | head -c 10)"
 
 
-curl -X POST https://slack.com/api/chat.update \
+curl -X POST "https://slack.com/api/${SLACK_API_METHOD}" \
   -H "Content-type: application/json; charset=utf-8" \
   -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
   --data-binary @- << EOF
