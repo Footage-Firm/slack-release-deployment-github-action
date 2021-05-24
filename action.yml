@@ -1,12 +1,53 @@
-name: 'Container Action Template'
-description: 'Get started with Container actions'
-author: 'GitHub'
-inputs: 
-  myInput:
-    description: 'Input to use'
-    default: 'world'
+name: 'Slack Release Deployment'
+description: 'An opinionated Github action that updates an existing deployment Slack message with new information and buttons that inform relevant parties about the state of the release.'
+author: 'Tochukwu Victor'
+inputs:
+  slack_bot_token:
+    description: 'Slack bot token used to make the chat.postMessage API call. Token should be prefixed by xoxb-'
+    required: true
+  slack_channel_id:
+    description: 'Name of the slack channel where the bot should post the QA gate message.'
+    required: true
+  slack_message_ts:
+    description: 'Name of the slack channel where the bot should post the QA gate message.'
+    required: true
+  slack_prompt:
+    description: 'What do you want users to do post-deployment? Try a friendly reminder to check your APM tool for choice for post-deployment changes.'
+    required: true
+
+  app_endpoint:
+    description: 'Optional endpoint of the staging environment that was deployed as part of this pipeline. Defaults to the git repo URL where the pipeline is being run.'
+    required: false
+  app_environment:
+    description: 'Environment of the application being deployed to.'
+    required: true
+  app_name:
+    description: 'Name of the application being deployed to. Using the github.repository variable as the value for this arg is recommended.'
+    required: true
+
+  commit_message_subject:
+    description: 'First line of the commit message associated with the deployment. See the git-commit-data-action (https://github.com/rlespinasse/git-commit-data-action) for an option to expose this value.'
+    required: true
+  committer_name:
+    description: 'Full name associated with the commit being deployed. See the git-commit-data-action (https://github.com/rlespinasse/git-commit-data-action) for an option to expose this value.'
+    required: true
+  commit_sha:
+    description: 'Full git SHA associated with the deployment. See the git-commit-data-action (https://github.com/rlespinasse/git-commit-data-action) for an option to expose this value.'
+    required: true
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.myInput }}
+    - ${{ inputs.slack_bot_token }}
+    - ${{ inputs.slack_channel_id }}
+    - ${{ inputs.slack_message_ts }}
+    - ${{ inputs.slack_prompt }}
+
+    - ${{ inputs.app_endpoint }}
+    - ${{ inputs.app_environment }}
+    - ${{ inputs.app_name }}
+
+    - ${{ inputs.commit_message_subject }}
+    - ${{ inputs.committer_name }}
+    - ${{ inputs.commit_sha }}
